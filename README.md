@@ -1,5 +1,8 @@
 # Support UX Chat Cloud
 
+![Support UX Chat Cloud - Parhum Khoshbakht](sample.jpg)
+
+-----
 
 ## Add App Authentication
 Open ```auth.js``` and add your custom username and password to ```appAuth``` object.
