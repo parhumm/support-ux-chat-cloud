@@ -1,0 +1,20 @@
+{
+  "name": "tv-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tv.js",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "express": "^4.15.2",
+    "express-basic-auth": "^1.2.0",
+    "node-crisp-api": "^1.7.1",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node tv.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

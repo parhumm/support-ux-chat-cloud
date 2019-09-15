@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1.0">
+
+    <title>Support UX Chat Cloud</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="http://code.highcharts.com/css/themes/dark-unica.css?_ga=2.137819056.1016945995.1564985746-1610786661.1564848683" rel="stylesheet">
+
+    <style>
+        html {
+            font-size: 17px;
+            line-height: 1.5;
+        }
+
+        body {
+            direction: rtl;
+            text-align: right;
+            background: #0a0a0a;
+            font-family: IRANSans, Tahoma;
+            scroll-behavior: smooth;
+        }
+
+        .wrapper {
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        .messages {
+            margin: -20px;
+            padding: 80px 70px 50px 50px;
+            overflow: scroll;
+            height: 100vh;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .messages > li {
+            margin-bottom: 15px;
+        }
+
+        .chat {
+            padding-bottom: 15px;
+            list-style: none;
+            border-bottom: solid 1px #eee;
+        }
+
+        .chat .title {
+            font-weight: bold;
+            margin-left: 5px;
+            text-align: left;
+            display: block;
+            color: #666;
+        }
+
+        .chat .pretext {
+            display: inline;
+            margin-left: 5px;
+        }
+
+        .chat .text {
+            display: inline;
+        }
+
+        .left-side,
+        .right-side {
+            float: left;
+            width: 50%;
+        }
+
+        .left-side {
+            padding: 30px;
+        }
+
+        .right-side {
+            overflow: hidden;
+        }
+
+        .box {
+            -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            background: rgb(251, 251, 251);
+            border-radius: 3px;
+            padding: 15px 10px;
+            margin-bottom: 15px;
+        }
+
+        .wordcloud {
+            height: 320px;
+            background: #2b2b2c;
+
+        }
+
+
+        .mine {
+            align-items: flex-end;
+        }
+
+        .mine .msg {
+            color: white;
+            background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        .mine .msg.last:before {
+            content: "";
+            position: absolute;
+            z-index: 0;
+            bottom: 0;
+            right: -8px;
+            height: 20px;
+            width: 20px;
+            background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);
+            background-attachment: fixed;
+            border-bottom-left-radius: 15px;
+        }
+
+        .mine .msg.last:after {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            bottom: 0;
+            right: -10px;
+            width: 10px;
+            height: 20px;
+            background: #0a0a0a;
+            border-bottom-left-radius: 10px;
+        }
+
+        .msg {
+            border-radius: 20px;
+            padding: 8px 15px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+        .message-name {
+            color: #89959a;
+            font-weight: bold;
+            font-size: 14px;
+            position: relative;
+            display: block;
+            right: -50px;
+        }
+
+        .message-name .avatar {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            display: block;
+            content: '';
+            border-radius: 50%;
+            position: absolute;
+            top: -50px;
+            background-color: #89959a;
+            background-position: 0 0;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .copyright {
+            text-align: left;
+            font-size: 11px;
+        }
+
+        .copyright a {
+            color: #8f8f94;
+        }
+
+        @media (max-width: 1000px) {
+            html {
+                font-size: 14px;
+            }
+
+            .wrapper {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .left-side, .right-side {
+                float: none;
+                width: 100%;
+            }
+
+            .left-side {
+                padding: 0;
+                margin-bottom: 30px;
+            }
+
+            .messages {
+                margin: 0;
+                padding: 0 30px 0px 10px;
+            }
+
+            .message-name {
+                font-size: 12px;
+                right: -30px;
+            }
+
+            .message-name .avatar {
+                top: -30px;
+                width: 20px;
+                height: 20px;
+                line-height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="left-side">
+            <div id="wordcloud-double" class="wordcloud wordcloud-double box"></div>
+            <div id="wordcloud-single" class="wordcloud wordcloud-single box"></div>
+            <div class="copyright"><a href="https://github.com/parhumm/support-ux-chat-cloud" target="_blank">Support UX Chat Cloud</a></div>
+        </div>
+        <div class="right-side">
+            <ul id="messages" class="messages"></ul>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/wordcloud.js"></script>
+
+    <script>
+        var wordcloudSingle = [],
+            wordcloudDouble = [],
+            highchartsSingle,
+            highchartsDouble;
+
+        var chat = function(emitMessages, conversation) {
+            var template = '';
+                template += '<li class="mine '+emitMessages.sessionId+'" data-sessionid="'+emitMessages.sessionId+'">';
+
+            if (conversation.length > 1) {
+                for (var i = (conversation.length - 2); i >= 0; i--) {
+                    template += '<div>';
+                        template += '<div class="msg">';
+                        template += conversation[i];
+                        template += '</div>';
+                    template += '</div>';
+                }
+            }
+
+                template += '<div>';
+                    template += '<div class="msg last">';
+                    template += conversation[(conversation.length - 1)];
+                    template += '</div>';
+                template += '</div>';
+
+            template += '<div class="message-name"><span class="avatar" ' + (emitMessages.country ? 'style="background-image: url(https://app.crisp.chat/images/includes/flags/' + emitMessages.country.toLowerCase() +'.png);"' : '') + '></span>' + emitMessages.username + '</div>';
+
+            template += '</li>';
+
+            return template;
+        };
+
+        $(function () {
+            var socket = io(),
+                $messages = $('#messages');
+
+            socket.on('message', function(emitMessages){
+                if ($messages.find('.chat').length > 300) {
+                    $messages.html('');
+                }
+
+                $('[data-sessionid="' + emitMessages.sessionId + '"]').remove();
+
+                $messages.append(chat(emitMessages, emitMessages.conversation));
+
+
+                //
+                // Wordcloud
+                //
+
+                // Wordcloud Double
+                if (wordcloudDouble !== emitMessages.wordcloudData.double) {
+                    wordcloudDouble = emitMessages.wordcloudData.double;
+
+                    if (typeof highchartsDouble === 'undefined') {
+                        highchartsDouble = Highcharts.chart('wordcloud-double', {
+                            series: [{
+                                type: 'wordcloud',
+                                data: wordcloudDouble,
+                                name: 'Occurrences',
+
+                                rotation: {
+                                    from:0,
+                                    to: 0,
+                                    orientations: 1
+                                },
+
+                                style: {
+                                    fontFamily: 'IRANSans'
+                                }
+                            }],
+                            title: {
+                                text: ''
+                            }
+                        });
+                    } else {
+                        highchartsDouble.update({
+                            series: [{
+                                type: 'wordcloud',
+                                data: wordcloudDouble,
+                                name: 'Occurrences',
+
+                                rotation: {
+                                    from:0,
+                                    to: 0,
+                                    orientations: 1
+                                },
+                            }],
+                        });
+                    }
+                }
+
+                // Wordcloud Single
+                if (wordcloudSingle !== emitMessages.wordcloudData.single) {
+                    wordcloudSingle = emitMessages.wordcloudData.single;
+
+                    if (typeof highchartsSingle === 'undefined') {
+                        highchartsSingle = Highcharts.chart('wordcloud-single', {
+                            series: [{
+                                type: 'wordcloud',
+                                data: wordcloudSingle,
+                                name: 'Occurrences',
+
+                                rotation: {
+                                    from:0,
+                                    to: 0,
+                                    orientations: 1
+                                },
+
+                                style: {
+                                    fontFamily: 'IRANSans'
+                                }
+                            }],
+                            title: {
+                                text: ''
+                            }
+                        });
+                    } else {
+                        highchartsSingle.update({
+                            series: [{
+                                type: 'wordcloud',
+                                data: wordcloudSingle,
+                                name: 'Occurrences',
+
+                                rotation: {
+                                    from:0,
+                                    to: 0,
+                                    orientations: 1
+                                },
+                            }],
+                        });
+                    }
+                }
+
+                var objDiv = document.getElementById('messages');
+                objDiv.scrollTop = objDiv.scrollHeight;
+            });
+        });
+    </script>
+</body>
+</html>
