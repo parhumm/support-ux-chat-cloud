@@ -40,7 +40,7 @@ Open ```auth.js``` and add your Crisp ```identifier```, ```key``` and ```website
 1. ```npm install```
 2. ```npm start```
 3. open http://localhost:3000
-4. Send first message on Crisp Chat and test it
+4. Send the first message on Crisp Chat and test it
 
 -----
 ## Contact Me
