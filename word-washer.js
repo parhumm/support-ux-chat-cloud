@@ -33,8 +33,8 @@ for (var i = 0; i < words_badWords.words.length; i++) {
 var forceRemove = function(message) {
     var clearMessage = message;
 
-    console.log('>> Force Remove <<');
-    console.log('Input: ', clearMessage);
+    // console.log('>> Force Remove <<');
+    // console.log('Input: ', clearMessage);
 
     for (var j = 0; j < words.forceRemove.length; j++) {
         var targetWord = words.forceRemove[j],
@@ -45,8 +45,8 @@ var forceRemove = function(message) {
         }
     }
 
-    console.log('Output: ', clearMessage);
-    console.log('-------------------');
+    // console.log('Output: ', clearMessage);
+    // console.log('-------------------');
 
     return clearMessage;
 }
@@ -58,8 +58,8 @@ var forceRemove = function(message) {
 //
 
 var replaceWords = function(wordcloudContent, content) {
-    console.log('>> REPLACE <<');
-    console.log('Input: ', wordcloudContent);
+    // console.log('>> REPLACE <<');
+    // console.log('Input: ', wordcloudContent);
 
     for (var key in words.replaceIt) {
         var targetWord = key,
@@ -91,8 +91,8 @@ var replaceWords = function(wordcloudContent, content) {
         }
     }
 
-    console.log('Output: ', wordcloudContent);
-    console.log('-------------------');
+    // console.log('Output: ', wordcloudContent);
+    // console.log('-------------------');
 
     return {
         wordcloudContent: wordcloudContent,
@@ -107,8 +107,8 @@ var replaceWords = function(wordcloudContent, content) {
 //
 
 var carefullyRemove = function(message) {
-    console.log('>> Carefully Remove <<');
-    console.log('Input: ', message);
+    // console.log('>> Carefully Remove <<');
+    // console.log('Input: ', message);
 
     for (var j = 0; j < words.carefullyRemove.length; j++) {
         var targetWord = words.carefullyRemove[j],
@@ -139,8 +139,8 @@ var carefullyRemove = function(message) {
             message = message.replace( new RegExp( targetWord, 'g' ), ' ' );
         }
     }
-    console.log('Output: ', message);
-    console.log('-------------------');
+    // console.log('Output: ', message);
+    // console.log('-------------------');
 
     return message;
 }
