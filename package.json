@@ -5,7 +5,7 @@
   "main": "tv.js",
   "dependencies": {
     "chalk": "^2.4.2",
-    "express": "^4.15.2",
+    "express": "^4.17.3",
     "express-basic-auth": "^1.2.0",
     "node-crisp-api": "^1.7.1",
     "socket.io": "^2.2.0"
